@@ -1,0 +1,14 @@
+fhashcode:由日志信息计算出的hashcode值
+fsource：日志来源（syslog、trap）
+fgroupid：分组id
+fip：日志ip
+fUser：用户
+fport：端口
+flevel：级别
+fcount:日志发生次数
+fcounttemp：
+ffirsttime:第一次发生时间
+fUpdateTime：最新发生时间
+fMsg：日志信息
+fLogType：日志类型
+MOSN，fMOType：对应核心管理模型处的字段，用于设备定位
