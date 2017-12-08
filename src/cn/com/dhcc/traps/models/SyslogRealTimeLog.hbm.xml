@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-12-8 12:44:06 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="cn.com.dhcc.traps.models.SyslogRealTimeLog" table="tmsyslogrealtimelog">
+        <id name="hashCode" type="string">
+            <column name="fHashCode" />
+            <generator class="assigned" />
+        </id>
+       
+        <property name="ip" type="java.lang.String">
+            <column name="fIP" />
+        </property>
+        
+        
+        <property name="msg" type="java.lang.String">
+            <column name="fMSG" />
+        </property>
+       
+        <property name="flag" type="int">
+            <column name="FLAG" />
+        </property>
+    </class>
+</hibernate-mapping>
