@@ -12,5 +12,6 @@
   <property name="show_sql">true</property>
 
 	<mapping resource="cn/com/dhcc/traps/models/SyslogRealTimeLog.hbm.xml"/>
+	<mapping resource="cn/com/dhcc/traps/models/ActiveAlarm.hbm.xml"/>
  </session-factory>
 </hibernate-configuration>
