@@ -8,21 +8,21 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import cn.com.dhcc.commons.HibernateUtil;
-import cn.com.dhcc.traps.dao.ActiveDao;
+import cn.com.dhcc.traps.dao.ActiveAlarmDao;
 import cn.com.dhcc.traps.dao.SyslogRealTimeLogDao;
 import cn.com.dhcc.traps.models.ActiveAlarm;
 import cn.com.dhcc.traps.models.SyslogRealTimeLog;
 
-public class ActiveService {
+public class ActiveAlarmService {
 	
-	private ActiveDao dao;
+	private ActiveAlarmDao dao;
 	
 	/**
 	 * @param dao
 	 */
-	public ActiveService() {
+	public ActiveAlarmService() {
 		super();
-		this.dao = new ActiveDao();
+		this.dao = new ActiveAlarmDao();
 	}
 
 	public List< ActiveAlarm> quaryAllNonSended(){
@@ -53,7 +53,7 @@ public class ActiveService {
 		Transaction transaction = HibernateUtil.getCurrentSession().beginTransaction();
 		try{
 			for(ActiveAlarm log:logs){
-				log.setFlag((byte)1);
+				log.setFlag(1);
 				dao.update(log);
 			}
 			transaction.commit();

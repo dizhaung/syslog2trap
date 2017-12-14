@@ -18,7 +18,7 @@ import org.snmp4j.mp.SnmpConstants;
 import cn.com.dhcc.traps.TrapSender;
 import cn.com.dhcc.traps.models.ActiveAlarm;
 import cn.com.dhcc.traps.models.SyslogRealTimeLog;
-import cn.com.dhcc.traps.services.ActiveService;
+import cn.com.dhcc.traps.services.ActiveAlarmService;
 import cn.com.dhcc.traps.services.SyslogRealTimeLogService;
 import cn.com.dhcc.traps.util.TrapPduUtil;
 
@@ -34,7 +34,7 @@ public class MainTest {
 
 	@Test
 	public void testMain() {
-		ActiveService service = new ActiveService();
+		ActiveAlarmService service = new ActiveAlarmService();
 		TrapSender.SYS_UP_TIME = new Date().getTime();
 		List< ActiveAlarm> logs = service.quaryAllNonSended();
 		List<PDUv1> pdus = TrapPduUtil.convertAlarmToPdu(logs);

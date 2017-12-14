@@ -12,7 +12,7 @@ import org.snmp4j.PDUv1;
 import cn.com.dhcc.traps.TrapSender;
 import cn.com.dhcc.traps.models.ActiveAlarm;
 import cn.com.dhcc.traps.models.SyslogRealTimeLog;
-import cn.com.dhcc.traps.services.ActiveService;
+import cn.com.dhcc.traps.services.ActiveAlarmService;
 import cn.com.dhcc.traps.services.SyslogRealTimeLogService;
 import cn.com.dhcc.traps.util.TrapPduUtil;
 
@@ -26,7 +26,7 @@ public class Main {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				ActiveService service = new ActiveService();
+				ActiveAlarmService service = new ActiveAlarmService();
 
 				List< ActiveAlarm> logs = service.quaryAllNonSended();
 				List<PDUv1> pdus = TrapPduUtil.convertAlarmToPdu(logs);

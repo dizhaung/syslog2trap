@@ -8,10 +8,10 @@ import org.junit.Test;
 
 public class ActiveServiceTest {
 
-	private ActiveService service;
+	private ActiveAlarmService service;
 	@Before
 	public void setUp() throws Exception {
-		this.service = new ActiveService();
+		this.service = new ActiveAlarmService();
 	}
 
 	@After

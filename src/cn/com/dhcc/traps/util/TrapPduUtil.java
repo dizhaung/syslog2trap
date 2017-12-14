@@ -7,7 +7,10 @@ import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.snmp4j.PDU;
 import org.snmp4j.PDUv1;
@@ -25,117 +28,169 @@ import cn.com.dhcc.traps.models.SyslogRealTimeLog;
 
 public class TrapPduUtil {
 
-	public static List<PDUv1> toPdu(List< SyslogRealTimeLog> list){
+	private final static Map<String, String> dynamicLevelCauseOidMap = new HashMap();
+	static {
+		dynamicLevelCauseOidMap.put("设备不能访问", "1.3.6.1.4.1.6876.12.1.");
+		dynamicLevelCauseOidMap.put("CPU利用率阀值越界", "1.3.6.1.4.1.6876.12.2.");
+		dynamicLevelCauseOidMap.put("ENT坏", "1.3.6.1.4.1.6876.12.3.");
+		dynamicLevelCauseOidMap.put("丢包率阀值越界", "1.3.6.1.4.1.6876.12.4.");
+		dynamicLevelCauseOidMap.put("内存利用率阀值越界", "1.3.6.1.4.1.6876.12.5.");
+		dynamicLevelCauseOidMap.put("接口状态变更", "1.3.6.1.4.1.6876.12.6.");
+		dynamicLevelCauseOidMap.put("电源坏", "1.3.6.1.4.1.6876.12.7.");
+		dynamicLevelCauseOidMap.put("系统单元坏", "1.3.6.1.4.1.6876.12.8.");
+		dynamicLevelCauseOidMap.put("错包率阀值越界", "1.3.6.1.4.1.6876.12.9.");
+		dynamicLevelCauseOidMap.put("风扇坏", "1.3.6.1.4.1.6876.12.10.");
+		dynamicLevelCauseOidMap.put("设备不可达", "1.3.6.1.4.1.6876.12.11.");
+		dynamicLevelCauseOidMap.put("接口down", "1.3.6.1.4.1.6876.12.12.");
+		dynamicLevelCauseOidMap.put("文件系统使用率阀值越界", "1.3.6.1.4.1.6876.12.13.");
+		dynamicLevelCauseOidMap.put("物理卷使用率阀值越界", "1.3.6.1.4.1.6876.12.14.");
+		dynamicLevelCauseOidMap.put("磁盘分区使用率阀值越界", "1.3.6.1.4.1.6876.12.15.");
+		dynamicLevelCauseOidMap.put("链路:down", "1.3.6.1.4.1.6876.12.16.");
+		dynamicLevelCauseOidMap.put("表空间使用率阀值越界", "1.3.6.1.4.1.6876.12.17.");
+		dynamicLevelCauseOidMap.put("响应时间阀值越界", "1.3.6.1.4.1.6876.12.18.");
+		dynamicLevelCauseOidMap.put("电源传感器坏", "1.3.6.1.4.1.6876.12.19.");
+		dynamicLevelCauseOidMap.put("电源传感器配置变更", "1.3.6.1.4.1.6876.12.20.");
+		dynamicLevelCauseOidMap.put("电源配置变更", "1.3.6.1.4.1.6876.12.21.");
+	}
+
+	public static List<PDUv1> toPdu(List<SyslogRealTimeLog> list) {
 		List<PDUv1> pduList = new ArrayList();
-		
-		for(SyslogRealTimeLog log:list){
+
+		for (SyslogRealTimeLog log : list) {
 			PDUv1 pdu = new PDUv1();
-	       pdu.setErrorIndex(0);
-	        pdu.setErrorStatus(0);
-	        pdu.setRequestID(new Integer32(0));
-	        //加入设备启动时间
-	        pdu.setTimestamp(new Date().getTime()- TrapSender.SYS_UP_TIME);
-	      
-			//设定第二个变量Enterprise
-	        pdu.setEnterprise(new OID("1.3.6.1.4.1.6876.12.1.4"));
-	        try {
+			pdu.setErrorIndex(0);
+			pdu.setErrorStatus(0);
+			pdu.setRequestID(new Integer32(0));
+			// 加入设备启动时间
+			pdu.setTimestamp(new Date().getTime() - TrapSender.SYS_UP_TIME);
+
+			// 设定第二个变量Enterprise
+			pdu.setEnterprise(new OID("1.3.6.1.4.1.6876.12.1.4"));
+			try {
 				pdu.setAgentAddress(new IpAddress(InetAddress.getLocalHost()));
 			} catch (UnknownHostException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-	        pdu.setGenericTrap(PDUv1.ENTERPRISE_SPECIFIC);
+			pdu.setGenericTrap(PDUv1.ENTERPRISE_SPECIFIC);
 			try {
-				String title = URLEncoder.encode("统一平台告警", "utf-8").replaceAll("%", " 0x").replaceFirst(" ", "");
-				pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.301.0"),  
-		                new OctetString(title)));  
+				String title = URLEncoder.encode("统一平台告警", "utf-8")
+						.replaceAll("%", " 0x").replaceFirst(" ", "");
+				pdu.add(new VariableBinding(new OID(
+						"1.3.6.1.4.1.6876.4.3.301.0"), new OctetString(title)));
 
-				 pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.302.0"),  
-			                new OctetString(log.getIp())));  
-			       
-				 String content = URLEncoder.encode(log.getMsg(), "utf-8").replaceAll("%", " 0x").replaceFirst(" ", "");
-				 pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.303.0"),  
-			                new OctetString(content)));  
-			     
-				String bussinessSys = URLEncoder.encode("业务云平台网管系统", "utf-8").replaceAll("%", " 0x").replaceFirst(" ", "");
-		        pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.304.0"),  
-		                new OctetString(bussinessSys)));  
-		        
-		        pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.308.0"),  
-		                    new Integer32(99)));  
-		        pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.309.0"),  
-		                new OctetString("10")));  
-		        
+				pdu.add(new VariableBinding(new OID(
+						"1.3.6.1.4.1.6876.4.3.302.0"), new OctetString(log
+						.getIp())));
+
+				String content = URLEncoder.encode(log.getMsg(), "utf-8")
+						.replaceAll("%", " 0x").replaceFirst(" ", "");
+				pdu.add(new VariableBinding(new OID(
+						"1.3.6.1.4.1.6876.4.3.303.0"), new OctetString(content)));
+
+				String bussinessSys = URLEncoder.encode("业务云平台网管系统", "utf-8")
+						.replaceAll("%", " 0x").replaceFirst(" ", "");
+				pdu.add(new VariableBinding(new OID(
+						"1.3.6.1.4.1.6876.4.3.304.0"), new OctetString(
+						bussinessSys)));
+
+				pdu.add(new VariableBinding(new OID(
+						"1.3.6.1.4.1.6876.4.3.308.0"), new Integer32(99)));
+				pdu.add(new VariableBinding(new OID(
+						"1.3.6.1.4.1.6876.4.3.309.0"), new OctetString("10")));
+
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			 
-		  
-	    	pdu.add(new VariableBinding(new OID( SnmpConstants.snmpTrapEnterprise.toDottedString()),  
-	                        new OID("1.3.6.1.4.1.6876.12")));  
-			
-	    	pdu.setType(PDU.V1TRAP);  
-	        
-	        pduList.add(pdu);
+
+			pdu.add(new VariableBinding(new OID(
+					SnmpConstants.snmpTrapEnterprise.toDottedString()),
+					new OID("1.3.6.1.4.1.6876.12")));
+
+			pdu.setType(PDU.V1TRAP);
+
+			pduList.add(pdu);
 		}
 		return pduList;
 	}
-	
-	public static List<PDUv1> convertAlarmToPdu(List< ActiveAlarm> list){
-		List<PDUv1> pduList = new ArrayList();
-		
-		for(ActiveAlarm alarm:list){
-			PDUv1 pdu = new PDUv1();
-	       pdu.setErrorIndex(0);
-	        pdu.setErrorStatus(0);
-	        pdu.setRequestID(new Integer32(0));
-	        //加入设备启动时间
-	        pdu.setTimestamp(new Date().getTime()- TrapSender.SYS_UP_TIME);
-	      
-			//设定第二个变量Enterprise
-	        pdu.setEnterprise(new OID("1.3.6.1.4.1.6876.12.1.4"));
-	        try {
-				pdu.setAgentAddress(new IpAddress(InetAddress.getLocalHost()));
-			} catch (UnknownHostException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	        pdu.setGenericTrap(PDUv1.ENTERPRISE_SPECIFIC);
-			try {
-				String title = URLEncoder.encode("统一平台告警", "utf-8").replaceAll("%", " 0x").replaceFirst(" ", "");
-				pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.301.0"),  
-		                new OctetString(title)));  
 
-				 pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.302.0"),  
-			                new OctetString(alarm.getMoIp())));  
-			       
-				 String content = URLEncoder.encode(alarm.getDetail(), "utf-8").replaceAll("%", " 0x").replaceFirst(" ", "");
-				 pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.303.0"),  
-			                new OctetString(content)));  
-			     
-				String bussinessSys = URLEncoder.encode("业务云平台网管系统", "utf-8").replaceAll("%", " 0x").replaceFirst(" ", "");
-		        pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.304.0"),  
-		                new OctetString(bussinessSys)));  
-		        
-		        pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.308.0"),  
-		                    new Integer32(99)));  
-		        pdu.add(new VariableBinding(new OID("1.3.6.1.4.1.6876.4.3.309.0"),  
-		                new OctetString("10")));  
-		        
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			 
-		  
-	    	pdu.add(new VariableBinding(new OID( SnmpConstants.snmpTrapEnterprise.toDottedString()),  
-	                        new OID("1.3.6.1.4.1.6876.12")));  
+	public static List<PDUv1> convertAlarmToPdu(List<ActiveAlarm> list) {
+		List<PDUv1> pduList = new ArrayList();
+
+		for (ActiveAlarm alarm : list) {
 			
-	    	pdu.setType(PDU.V1TRAP);  
-	        
-	        pduList.add(pdu);
+			String enterprise = generateEnterprise(alarm);
+			if(!"".equals(enterprise)){
+				PDUv1 pdu = new PDUv1();
+				pdu.setErrorIndex(0);
+				pdu.setErrorStatus(0);
+				pdu.setRequestID(new Integer32(0));
+				// 加入设备启动时间
+				pdu.setTimestamp(new Date().getTime() - TrapSender.SYS_UP_TIME);
+
+				// 设定第二个变量Enterprise
+				pdu.setEnterprise(new OID(enterprise));
+				try {
+					pdu.setAgentAddress(new IpAddress(InetAddress.getLocalHost()));
+				} catch (UnknownHostException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				pdu.setGenericTrap(PDUv1.ENTERPRISE_SPECIFIC);
+				try {
+					String title = URLEncoder.encode(alarm.getCause(), "utf-8")
+							.replaceAll("%", " 0x").replaceFirst(" ", "");
+					pdu.add(new VariableBinding(new OID(
+							"1.3.6.1.4.1.6876.4.3.301.0"), new OctetString(title)));
+
+					pdu.add(new VariableBinding(new OID(
+							"1.3.6.1.4.1.6876.4.3.302.0"), new OctetString(alarm
+							.getMoIp())));
+
+					String content = URLEncoder.encode(alarm.getDetail(), "utf-8")
+							.replaceAll("%", " 0x").replaceFirst(" ", "");
+					pdu.add(new VariableBinding(new OID(
+							"1.3.6.1.4.1.6876.4.3.303.0"), new OctetString(content)));
+
+					String bussinessSys = URLEncoder.encode("业务云平台网管系统", "utf-8")
+							.replaceAll("%", " 0x").replaceFirst(" ", "");
+					pdu.add(new VariableBinding(new OID(
+							"1.3.6.1.4.1.6876.4.3.304.0"), new OctetString(
+							bussinessSys)));
+
+					pdu.add(new VariableBinding(new OID(
+							"1.3.6.1.4.1.6876.4.3.308.0"), new Integer32(99)));
+					pdu.add(new VariableBinding(new OID(
+							"1.3.6.1.4.1.6876.4.3.309.0"), new OctetString("10")));
+
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				pdu.add(new VariableBinding(new OID(
+						SnmpConstants.snmpTrapEnterprise.toDottedString()),
+						new OID("1.3.6.1.4.1.6876.12")));
+
+				pdu.setType(PDU.V1TRAP);
+
+				pduList.add(pdu);
+			}
+			
 		}
 		return pduList;
+	}
+
+	private static String generateEnterprise(ActiveAlarm alarm) {
+		Set<String> causes = dynamicLevelCauseOidMap.keySet();
+		String almarCause = alarm.getCause().trim();
+		
+		for(String cause :causes){
+			if(almarCause.equals(cause)){
+				return dynamicLevelCauseOidMap.get(cause)+(alarm.getSeverity()-1);
+			}
+		}
+		return "";
 	}
 }
