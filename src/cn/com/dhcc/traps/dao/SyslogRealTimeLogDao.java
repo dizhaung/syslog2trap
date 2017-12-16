@@ -10,8 +10,7 @@ import cn.com.dhcc.traps.models.SyslogRealTimeLog;
 public class SyslogRealTimeLogDao {
 	public List< SyslogRealTimeLog> quaryAllNonSended(){
 		Session session = HibernateUtil.getCurrentSession();
-		
-		return session.createQuery("from SyslogRealTimeLog s where s.flag=:flag", SyslogRealTimeLog.class).setParameter("flag", 0).list();
+		return session.createQuery("from SyslogRealTimeLog s where s.flag=:flag").setParameter("flag", 0).list();
 	}
 	
 	public void  update(SyslogRealTimeLog log){

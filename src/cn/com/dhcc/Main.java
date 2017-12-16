@@ -27,9 +27,10 @@ public class Main {
 			public void run() {
 				// TODO Auto-generated method stub
 				ActiveAlarmService service = new ActiveAlarmService();
-
+				TrapSender.SYS_UP_TIME = new Date().getTime();
 				List< ActiveAlarm> logs = service.quaryAllNonSended();
 				List<PDUv1> pdus = TrapPduUtil.convertAlarmToPdu(logs);
+				
 				TrapSender.sendPDU(pdus);
 			    service.sended(logs);
 			}

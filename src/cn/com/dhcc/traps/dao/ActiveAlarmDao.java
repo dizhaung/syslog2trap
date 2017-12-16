@@ -12,7 +12,7 @@ public class ActiveAlarmDao {
 	public List< ActiveAlarm> quaryAllNonSended(){
 		Session session = HibernateUtil.getCurrentSession();
 		
-		return session.createQuery("from ActiveAlarm s where s.flag=:flag", ActiveAlarm.class).setParameter("flag", 0).list();
+		return session.createQuery("from ActiveAlarm s where s.flag=:flag").setParameter("flag", 0).list();
 	}
 	
 	public void  update(ActiveAlarm alarm){

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,13 @@ public class MainTest {
 	@Test
 	public void testURLEncode(){
 		try {
-			System.out.println(	URLEncoder.encode("127.0.0.1", "utf-8").replaceAll("%", " 0x").replaceFirst(" ", ""));
+			String encodedStr = URLEncoder.encode("127.0.0.1还可以", "utf-8").replaceAll("%", " 0x").replaceFirst("$ ", "");
+		
+			System.out.println(URLDecoder.decode((" "+encodedStr).replace(" 0x", "%"),"utf-8")); ;
+			
+				
+		
+
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

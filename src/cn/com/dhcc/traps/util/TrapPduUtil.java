@@ -29,28 +29,31 @@ import cn.com.dhcc.traps.models.SyslogRealTimeLog;
 public class TrapPduUtil {
 
 	private final static Map<String, String> dynamicLevelCauseOidMap = new HashMap();
+	private final static Map<String ,String > topLevelCauseOidMap = new HashMap();
 	static {
-		dynamicLevelCauseOidMap.put("设备不能访问", "1.3.6.1.4.1.6876.12.1.");
 		dynamicLevelCauseOidMap.put("CPU利用率阀值越界", "1.3.6.1.4.1.6876.12.2.");
-		dynamicLevelCauseOidMap.put("ENT坏", "1.3.6.1.4.1.6876.12.3.");
 		dynamicLevelCauseOidMap.put("丢包率阀值越界", "1.3.6.1.4.1.6876.12.4.");
 		dynamicLevelCauseOidMap.put("内存利用率阀值越界", "1.3.6.1.4.1.6876.12.5.");
-		dynamicLevelCauseOidMap.put("接口状态变更", "1.3.6.1.4.1.6876.12.6.");
-		dynamicLevelCauseOidMap.put("电源坏", "1.3.6.1.4.1.6876.12.7.");
-		dynamicLevelCauseOidMap.put("系统单元坏", "1.3.6.1.4.1.6876.12.8.");
 		dynamicLevelCauseOidMap.put("错包率阀值越界", "1.3.6.1.4.1.6876.12.9.");
-		dynamicLevelCauseOidMap.put("风扇坏", "1.3.6.1.4.1.6876.12.10.");
-		dynamicLevelCauseOidMap.put("设备不可达", "1.3.6.1.4.1.6876.12.11.");
-		dynamicLevelCauseOidMap.put("接口down", "1.3.6.1.4.1.6876.12.12.");
 		dynamicLevelCauseOidMap.put("文件系统使用率阀值越界", "1.3.6.1.4.1.6876.12.13.");
 		dynamicLevelCauseOidMap.put("物理卷使用率阀值越界", "1.3.6.1.4.1.6876.12.14.");
 		dynamicLevelCauseOidMap.put("磁盘分区使用率阀值越界", "1.3.6.1.4.1.6876.12.15.");
-		dynamicLevelCauseOidMap.put("链路:down", "1.3.6.1.4.1.6876.12.16.");
 		dynamicLevelCauseOidMap.put("表空间使用率阀值越界", "1.3.6.1.4.1.6876.12.17.");
 		dynamicLevelCauseOidMap.put("响应时间阀值越界", "1.3.6.1.4.1.6876.12.18.");
-		dynamicLevelCauseOidMap.put("电源传感器坏", "1.3.6.1.4.1.6876.12.19.");
 		dynamicLevelCauseOidMap.put("电源传感器配置变更", "1.3.6.1.4.1.6876.12.20.");
-		dynamicLevelCauseOidMap.put("电源配置变更", "1.3.6.1.4.1.6876.12.21.");
+
+		topLevelCauseOidMap.put("设备不能访问", "1.3.6.1.4.1.6876.12.1.4");
+		topLevelCauseOidMap.put("ENT坏", "1.3.6.1.4.1.6876.12.3.4");
+		topLevelCauseOidMap.put("电源坏", "1.3.6.1.4.1.6876.12.7.4");
+		topLevelCauseOidMap.put("风扇坏", "1.3.6.1.4.1.6876.12.10.4");
+		topLevelCauseOidMap.put("设备不可达", "1.3.6.1.4.1.6876.12.11.4");
+		topLevelCauseOidMap.put("接口down", "1.3.6.1.4.1.6876.12.12.4");
+		topLevelCauseOidMap.put("电源配置变更", "1.3.6.1.4.1.6876.12.21.4");
+		topLevelCauseOidMap.put("电源传感器坏", "1.3.6.1.4.1.6876.12.19.4");
+		topLevelCauseOidMap.put("链路:down", "1.3.6.1.4.1.6876.12.16.4");
+		topLevelCauseOidMap.put("系统单元坏", "1.3.6.1.4.1.6876.12.8.4");
+		topLevelCauseOidMap.put("接口状态变更", "1.3.6.1.4.1.6876.12.6.4");
+
 	}
 
 	public static List<PDUv1> toPdu(List<SyslogRealTimeLog> list) {
@@ -140,7 +143,7 @@ public class TrapPduUtil {
 				pdu.setGenericTrap(PDUv1.ENTERPRISE_SPECIFIC);
 				try {
 					String title = URLEncoder.encode(alarm.getCause(), "utf-8")
-							.replaceAll("%", " 0x").replaceFirst(" ", "");
+							.replaceAll("%", " 0x").replaceFirst("$ ", "");
 					pdu.add(new VariableBinding(new OID(
 							"1.3.6.1.4.1.6876.4.3.301.0"), new OctetString(title)));
 
@@ -149,12 +152,12 @@ public class TrapPduUtil {
 							.getMoIp())));
 
 					String content = URLEncoder.encode(alarm.getDetail(), "utf-8")
-							.replaceAll("%", " 0x").replaceFirst(" ", "");
+							.replaceAll("%", " 0x").replaceFirst("$ ", "");
 					pdu.add(new VariableBinding(new OID(
 							"1.3.6.1.4.1.6876.4.3.303.0"), new OctetString(content)));
 
 					String bussinessSys = URLEncoder.encode("业务云平台网管系统", "utf-8")
-							.replaceAll("%", " 0x").replaceFirst(" ", "");
+							.replaceAll("%", " 0x").replaceFirst("$ ", "");
 					pdu.add(new VariableBinding(new OID(
 							"1.3.6.1.4.1.6876.4.3.304.0"), new OctetString(
 							bussinessSys)));
@@ -183,12 +186,20 @@ public class TrapPduUtil {
 	}
 
 	private static String generateEnterprise(ActiveAlarm alarm) {
-		Set<String> causes = dynamicLevelCauseOidMap.keySet();
+		Set<String> dynamicLevelCauses = dynamicLevelCauseOidMap.keySet();
 		String almarCause = alarm.getCause().trim();
 		
-		for(String cause :causes){
-			if(almarCause.equals(cause)){
+		for(String cause :dynamicLevelCauses){
+			if(almarCause.contains(cause)){
 				return dynamicLevelCauseOidMap.get(cause)+(alarm.getSeverity()-1);
+			}
+		}
+		
+		Set<String> topLevelCauses = topLevelCauseOidMap.keySet();
+		
+		for(String cause: topLevelCauses){
+			if(almarCause.contains(cause)){
+				return topLevelCauseOidMap.get(cause);
 			}
 		}
 		return "";

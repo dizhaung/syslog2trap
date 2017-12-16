@@ -34,7 +34,7 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
  */  
 public class TrapSender {  
   
-	private final static String IP = "127.0.0.1";    //对端IP
+	private final static String IP = "10.210.92.11";    //对端IP
 	public  static long SYS_UP_TIME ;
 	private final static String PORT = "162";
     private   Snmp snmp = null;  
