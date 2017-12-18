@@ -1,12 +1,15 @@
 package cn.com.dhcc.traps;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -34,10 +37,38 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
  */  
 public class TrapSender {  
   
-	private final static String IP = "10.210.92.11";    //对端IP
+	private  static String IP ;    //对端IP
 	public  static long SYS_UP_TIME ;
-	private final static String PORT = "162";
+	private  static String PORT ;
     private   Snmp snmp = null;  
+    
+    static{
+			preInit();
+    }
+    
+    /**
+	 * @return the iP
+	 */
+	public static String getIP() {
+		return IP;
+	}
+	/**
+	 * @return the pORT
+	 */
+	public static String getPORT() {
+		return PORT;
+	}
+	private static void preInit() {
+    	try {
+			Properties properties = new Properties();
+			properties.load(new InputStreamReader(TrapSender.class.getResourceAsStream("/trap.properties")));
+			TrapSender.IP = properties.getProperty("ip");
+			TrapSender.PORT = properties.getProperty("port");
+    	} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
     /**
 	 * 
 	 */

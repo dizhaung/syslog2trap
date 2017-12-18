@@ -70,5 +70,11 @@ TrapSender sender = new TrapSender();
                         new OID(".1.3.6.1.4.1.6876.12")));  
         pdu.setType(PDU.TRAP);  
  	}
-
+	
+	
+	@Test
+	public void testPreInit(){
+		Class clazz = TrapSender.class;
+		System.out.println(TrapSender.getIP()+":"+TrapSender.getPORT());
+	}
 }
