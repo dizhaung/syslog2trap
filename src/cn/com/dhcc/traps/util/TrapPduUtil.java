@@ -30,29 +30,40 @@ public class TrapPduUtil {
 
 	private final static Map<String, String> dynamicLevelCauseOidMap = new HashMap();
 	private final static Map<String ,String > topLevelCauseOidMap = new HashMap();
+	private final static Map<String,String> storageOidFragmentMap = new HashMap();
 	static {
-		dynamicLevelCauseOidMap.put("CPU利用率阀值越界", "1.3.6.1.4.1.6876.12.2.");
-		dynamicLevelCauseOidMap.put("丢包率阀值越界", "1.3.6.1.4.1.6876.12.4.");
-		dynamicLevelCauseOidMap.put("内存利用率阀值越界", "1.3.6.1.4.1.6876.12.5.");
-		dynamicLevelCauseOidMap.put("错包率阀值越界", "1.3.6.1.4.1.6876.12.9.");
-		dynamicLevelCauseOidMap.put("文件系统使用率阀值越界", "1.3.6.1.4.1.6876.12.13.");
-		dynamicLevelCauseOidMap.put("物理卷使用率阀值越界", "1.3.6.1.4.1.6876.12.14.");
-		dynamicLevelCauseOidMap.put("磁盘分区使用率阀值越界", "1.3.6.1.4.1.6876.12.15.");
-		dynamicLevelCauseOidMap.put("表空间使用率阀值越界", "1.3.6.1.4.1.6876.12.17.");
-		dynamicLevelCauseOidMap.put("响应时间阀值越界", "1.3.6.1.4.1.6876.12.18.");
-		dynamicLevelCauseOidMap.put("电源传感器配置变更", "1.3.6.1.4.1.6876.12.20.");
+		storageOidFragmentMap.put("1509","12");//dell
+		storageOidFragmentMap.put("1501","13");//emc
+		storageOidFragmentMap.put("1508","14");//huawei
+		storageOidFragmentMap.put("1502","15");//ibm
+		storageOidFragmentMap.put("1503","16");//hp
+		storageOidFragmentMap.put("1504","17");//hds
+		storageOidFragmentMap.put("1505","18");//Network Appliance
+		storageOidFragmentMap.put("1506","19");//同友
+		storageOidFragmentMap.put("1507","20");		//日立
+		
+		dynamicLevelCauseOidMap.put("CPU利用率阀值越界", "1.3.6.1.4.1.6876.STORAGE.2.");
+		dynamicLevelCauseOidMap.put("丢包率阀值越界", "1.3.6.1.4.1.6876.STORAGE.4.");
+		dynamicLevelCauseOidMap.put("内存利用率阀值越界", "1.3.6.1.4.1.6876.STORAGE.5.");
+		dynamicLevelCauseOidMap.put("错包率阀值越界", "1.3.6.1.4.1.6876.STORAGE.9.");
+		dynamicLevelCauseOidMap.put("文件系统使用率阀值越界", "1.3.6.1.4.1.6876.STORAGE.13.");
+		dynamicLevelCauseOidMap.put("物理卷使用率阀值越界", "1.3.6.1.4.1.6876.STORAGE.14.");
+		dynamicLevelCauseOidMap.put("磁盘分区使用率阀值越界", "1.3.6.1.4.1.6876.STORAGE.15.");
+		dynamicLevelCauseOidMap.put("表空间使用率阀值越界", "1.3.6.1.4.1.6876.STORAGE.17.");
+		dynamicLevelCauseOidMap.put("响应时间阀值越界", "1.3.6.1.4.1.6876.STORAGE.18.");
+		dynamicLevelCauseOidMap.put("电源传感器配置变更", "1.3.6.1.4.1.6876.STORAGE.20.");
 
-		topLevelCauseOidMap.put("设备不能访问", "1.3.6.1.4.1.6876.12.1.4");
-		topLevelCauseOidMap.put("ENT坏", "1.3.6.1.4.1.6876.12.3.4");
-		topLevelCauseOidMap.put("电源坏", "1.3.6.1.4.1.6876.12.7.4");
-		topLevelCauseOidMap.put("风扇坏", "1.3.6.1.4.1.6876.12.10.4");
-		topLevelCauseOidMap.put("设备不可达", "1.3.6.1.4.1.6876.12.11.4");
-		topLevelCauseOidMap.put("接口down", "1.3.6.1.4.1.6876.12.12.4");
-		topLevelCauseOidMap.put("电源配置变更", "1.3.6.1.4.1.6876.12.21.4");
-		topLevelCauseOidMap.put("电源传感器坏", "1.3.6.1.4.1.6876.12.19.4");
-		topLevelCauseOidMap.put("链路:down", "1.3.6.1.4.1.6876.12.16.4");
-		topLevelCauseOidMap.put("系统单元坏", "1.3.6.1.4.1.6876.12.8.4");
-		topLevelCauseOidMap.put("接口状态变更", "1.3.6.1.4.1.6876.12.6.4");
+		topLevelCauseOidMap.put("设备不能访问", "1.3.6.1.4.1.6876.STORAGE.1.4");
+		topLevelCauseOidMap.put("ENT坏", "1.3.6.1.4.1.6876.STORAGE.3.4");
+		topLevelCauseOidMap.put("电源坏", "1.3.6.1.4.1.6876.STORAGE.7.4");
+		topLevelCauseOidMap.put("风扇坏", "1.3.6.1.4.1.6876.STORAGE.10.4");
+		topLevelCauseOidMap.put("设备不可达", "1.3.6.1.4.1.6876.STORAGE.11.4");
+		topLevelCauseOidMap.put("接口down", "1.3.6.1.4.1.6876.STORAGE.12.4");
+		topLevelCauseOidMap.put("电源配置变更", "1.3.6.1.4.1.6876.STORAGE.21.4");
+		topLevelCauseOidMap.put("电源传感器坏", "1.3.6.1.4.1.6876.STORAGE.19.4");
+		topLevelCauseOidMap.put("链路:down", "1.3.6.1.4.1.6876.STORAGE.16.4");
+		topLevelCauseOidMap.put("系统单元坏", "1.3.6.1.4.1.6876.STORAGE.8.4");
+		topLevelCauseOidMap.put("接口状态变更", "1.3.6.1.4.1.6876.STORAGE.6.4");
 
 	}
 
@@ -188,10 +199,12 @@ public class TrapPduUtil {
 	private static String generateEnterprise(ActiveAlarm alarm) {
 		Set<String> dynamicLevelCauses = dynamicLevelCauseOidMap.keySet();
 		String almarCause = alarm.getCause().trim();
+		String moType = alarm.getCmoType().getMoType();
 		
 		for(String cause :dynamicLevelCauses){
 			if(almarCause.contains(cause)){
-				return dynamicLevelCauseOidMap.get(cause)+(alarm.getSeverity()-1);
+				String oid =  dynamicLevelCauseOidMap.get(cause)+(alarm.getSeverity()-1);
+				return generateStorageOid(oid,moType);
 			}
 		}
 		
@@ -199,9 +212,16 @@ public class TrapPduUtil {
 		
 		for(String cause: topLevelCauses){
 			if(almarCause.contains(cause)){
-				return topLevelCauseOidMap.get(cause);
+				String oid =   topLevelCauseOidMap.get(cause);
+				return generateStorageOid(oid,moType);
 			}
 		}
 		return "";
+	}
+	
+	private static String generateStorageOid(String oid,String moType){
+		String oidFragment = storageOidFragmentMap.get(moType);
+		if(oidFragment == null) return "";
+		return oid.replaceFirst("STORAGE", oidFragment);
 	}
 }

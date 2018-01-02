@@ -3,8 +3,49 @@ package cn.com.dhcc.traps.models;
 import java.math.BigInteger;
 
 public class ActiveAlarm {
+	private CmoType cmoType;
+	/**
+	 * @return the cmoType
+	 */
+	public CmoType getCmoType() {
+		return cmoType;
+	}
+	/**
+	 * @param cmoType the cmoType to set
+	 */
+	public void setCmoType(CmoType cmoType) {
+		this.cmoType = cmoType;
+	}
+	private String moType;
+	/**
+	 * @return the moType
+	 */
+	public String getMoType() {
+		return moType;
+	}
+	private String topMoType;
 	
-
+	/**
+	 * @return the topMoType
+	 */
+	public String getTopMoType() {
+		
+		return topMoType;
+	}
+	/**
+	 * @param topMoType the topMoType to set
+	 */
+	public void setTopMoType(String topMoType) {
+		this.topMoType = topMoType;
+		
+	}
+	/**
+	 * @param moType the moType to set
+	 */
+	public void setMoType(String moType) {
+		this.moType = moType;
+		this.topMoType = moType.substring(0, moType.length()>=4?4:moType.length());
+	}
 	private BigInteger almSn;
 	/**
 	 * @return the almSn
@@ -23,9 +64,10 @@ public class ActiveAlarm {
 	 */
 	@Override
 	public String toString() {
-		return "Active [almSn=" + almSn + ", cause=" + cause + ", severity="
-				+ severity + ", detail=" + detail + ", moIp=" + moIp
-				+ ", flag=" + flag + "]";
+		return "ActiveAlarm [cmoType=" + cmoType + ", moType=" + moType
+				+ ", topMoType=" + topMoType + ", almSn=" + almSn + ", cause="
+				+ cause + ", severity=" + severity + ", detail=" + detail
+				+ ", moIp=" + moIp + ", flag=" + flag + "]";
 	}
 	private String cause;
 	private int severity;

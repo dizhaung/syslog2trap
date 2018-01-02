@@ -23,5 +23,9 @@
         <property name="flag" type="integer">
             <column name="FLAG" />
         </property>
+        
+        <property name="moType">
+        	<column name="fMOType"></column>
+        </property>
     </class>
 </hibernate-mapping>

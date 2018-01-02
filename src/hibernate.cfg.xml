@@ -2,16 +2,19 @@
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
                                          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
- <session-factory>
-  <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-  <property name="hibernate.connection.password">itims1cstnet2DH</property>
-  <property name="hibernate.connection.url">jdbc:mysql://10.210.94.225:3306/dmsn_998?useUnicode=true&amp;characterEncoding=utf-8</property>
-  <property name="hibernate.connection.username">itims</property>
-  <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-  <property name="hibernate.current_session_context_class">thread</property>
-  <property name="show_sql">true</property>
-
-	<mapping resource="cn/com/dhcc/traps/models/SyslogRealTimeLog.hbm.xml"/>
-	<mapping resource="cn/com/dhcc/traps/models/ActiveAlarm.hbm.xml"/>
- </session-factory>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<!-- <property name="hibernate.connection.password">itims1cstnet2DH</property>
+		<property name="hibernate.connection.url">jdbc:mysql://10.210.94.225:3306/dmsn_998?useUnicode=true&amp;characterEncoding=utf-8</property>
+		<property name="hibernate.connection.username">itims</property> -->
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="show_sql">true</property>
+		<property name="hibernate.connection.password">dhcc</property>
+		<property name="hibernate.connection.url">jdbc:mysql://111.205.6.228:3306/bigdata?useUnicode=true&amp;characterEncoding=utf-8</property>
+		<property name="hibernate.connection.username">root</property>
+		<mapping resource="cn/com/dhcc/traps/models/SyslogRealTimeLog.hbm.xml" />
+		<mapping resource="cn/com/dhcc/traps/models/ActiveAlarm.hbm.xml" />
+		<mapping resource="cn/com/dhcc/traps/models/CmoType.hbm.xml"/>
+	</session-factory>
 </hibernate-configuration>

@@ -13,6 +13,8 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.snmp4j.CommunityTarget;
 import org.snmp4j.PDU;
 import org.snmp4j.PDUv1;
@@ -113,6 +115,7 @@ public class TrapSender {
 	}
 	private static CommunityTarget target = null;
   
+	private static final Log LOGGER = LogFactory.getLog(TrapSender.class);
     /** 
      * 向管理进程发送Trap报文 
      *  
@@ -121,7 +124,7 @@ public class TrapSender {
     public  void sendPDU(PDUv1 pdu) throws IOException {  
 
       
-       System.out.println(pdu);
+    	LOGGER.info(pdu);
         // 向Agent发送PDU，并接收Response  
         ResponseEvent respEvnt = snmp.send(pdu, target);  
   
