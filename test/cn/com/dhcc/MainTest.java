@@ -47,12 +47,9 @@ public class MainTest {
 	@Test
 	public void testURLEncode(){
 		try {
-			String encodedStr = URLEncoder.encode("127.0.0.1还可以", "utf-8").replaceAll("%", " 0x").replaceFirst("$ ", "");
-		
-			System.out.println(URLDecoder.decode((" "+encodedStr).replace(" 0x", "%"),"utf-8")); ;
-			
-				
-		
+			String encodedStr = URLEncoder.encode("CPU利用率阀值越界", "utf-8").replaceAll("%", " 0x").replaceFirst("^ ", "");
+			System.out.println(encodedStr);
+			System.out.println(URLDecoder.decode((encodedStr).replaceAll(" 0x", "%"),"utf-8")); ;
 
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block

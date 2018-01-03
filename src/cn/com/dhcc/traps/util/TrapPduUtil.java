@@ -153,8 +153,8 @@ public class TrapPduUtil {
 				}
 				pdu.setGenericTrap(PDUv1.ENTERPRISE_SPECIFIC);
 				try {
-					String title = URLEncoder.encode(alarm.getCause(), "utf-8")
-							.replaceAll("%", " 0x").replaceFirst("$ ", "");
+					String title = URLEncoder.encode(alarm.getCauseWithSeverity(), "utf-8")
+							.replaceAll("%", " 0x").replaceFirst("^ ", "");
 					pdu.add(new VariableBinding(new OID(
 							"1.3.6.1.4.1.6876.4.3.301.0"), new OctetString(title)));
 
@@ -163,12 +163,12 @@ public class TrapPduUtil {
 							.getMoIp())));
 
 					String content = URLEncoder.encode(alarm.getDetail(), "utf-8")
-							.replaceAll("%", " 0x").replaceFirst("$ ", "");
+							.replaceAll("%", " 0x").replaceFirst("^ ", "");
 					pdu.add(new VariableBinding(new OID(
 							"1.3.6.1.4.1.6876.4.3.303.0"), new OctetString(content)));
 
 					String bussinessSys = URLEncoder.encode("业务云平台网管系统", "utf-8")
-							.replaceAll("%", " 0x").replaceFirst("$ ", "");
+							.replaceAll("%", " 0x").replaceFirst("^ ", "");
 					pdu.add(new VariableBinding(new OID(
 							"1.3.6.1.4.1.6876.4.3.304.0"), new OctetString(
 							bussinessSys)));
@@ -203,7 +203,11 @@ public class TrapPduUtil {
 		
 		for(String cause :dynamicLevelCauses){
 			if(almarCause.contains(cause)){
-				String oid =  dynamicLevelCauseOidMap.get(cause)+(alarm.getSeverity()-1);
+				int severity = alarm.getSeverity()-1;
+				String oid =  dynamicLevelCauseOidMap.get(cause)+severity;
+				
+				//告警原因带级别，比如：CPU利用率阀值越界1级
+				alarm.setCauseWithSeverity(almarCause+severity+"级");
 				return generateStorageOid(oid,moType);
 			}
 		}
@@ -218,7 +222,6 @@ public class TrapPduUtil {
 		}
 		return "";
 	}
-	
 	private static String generateStorageOid(String oid,String moType){
 		String oidFragment = storageOidFragmentMap.get(moType);
 		if(oidFragment == null) return "";

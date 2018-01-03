@@ -3,6 +3,19 @@ package cn.com.dhcc.traps.models;
 import java.math.BigInteger;
 
 public class ActiveAlarm {
+	private String causeWithSeverity;
+	/**
+	 * @return the causeWithSeverity
+	 */
+	public String getCauseWithSeverity() {
+		return causeWithSeverity;
+	}
+	/**
+	 * @param causeWithSeverity the causeWithSeverity to set
+	 */
+	public void setCauseWithSeverity(String causeWithSeverity) {
+		this.causeWithSeverity = causeWithSeverity;
+	}
 	private CmoType cmoType;
 	/**
 	 * @return the cmoType
@@ -64,7 +77,8 @@ public class ActiveAlarm {
 	 */
 	@Override
 	public String toString() {
-		return "ActiveAlarm [cmoType=" + cmoType + ", moType=" + moType
+		return "ActiveAlarm [causeWithSeverity=" + causeWithSeverity
+				+ ", cmoType=" + cmoType + ", moType=" + moType
 				+ ", topMoType=" + topMoType + ", almSn=" + almSn + ", cause="
 				+ cause + ", severity=" + severity + ", detail=" + detail
 				+ ", moIp=" + moIp + ", flag=" + flag + "]";
