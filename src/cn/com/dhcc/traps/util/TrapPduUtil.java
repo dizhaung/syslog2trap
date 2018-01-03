@@ -207,7 +207,7 @@ public class TrapPduUtil {
 				String oid =  dynamicLevelCauseOidMap.get(cause)+severity;
 				
 				//告警原因带级别，比如：CPU利用率阀值越界1级
-				alarm.setCauseWithSeverity(almarCause+severity+"级");
+				alarm.setCauseWithSeverity(almarCause+severity+"级门限告警");
 				return generateStorageOid(oid,moType);
 			}
 		}
