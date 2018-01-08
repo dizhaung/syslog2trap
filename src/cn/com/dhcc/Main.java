@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.snmp4j.PDU;
 import org.snmp4j.PDUv1;
@@ -18,6 +19,7 @@ import cn.com.dhcc.traps.util.TrapPduUtil;
 
 public class Main {
 
+	private static final Log LOGGER = LogFactory.getLog(Main.class);
 	public static void main(String[] args){
 		Timer timer = new Timer();
 		TrapSender.SYS_UP_TIME = new Date().getTime();
@@ -26,6 +28,7 @@ public class Main {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
+				try{
 				ActiveAlarmService service = new ActiveAlarmService();
 				TrapSender.SYS_UP_TIME = new Date().getTime();
 				List< ActiveAlarm> logs = service.quaryAllNonSended();
@@ -33,6 +36,10 @@ public class Main {
 				
 				TrapSender.sendPDU(pdus);
 			    service.sended(logs);
+				}catch(Exception e){
+					LOGGER.error(e);
+					e.printStackTrace();
+				}
 			}
 			
 		}, 0, 20*1000);
