@@ -8,27 +8,27 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import cn.com.dhcc.commons.HibernateUtil;
-import cn.com.dhcc.traps.dao.ActiveAlarmDao;
+import cn.com.dhcc.traps.dao.AlarmDao;
 import cn.com.dhcc.traps.dao.SyslogRealTimeLogDao;
-import cn.com.dhcc.traps.models.ActiveAlarm;
+import cn.com.dhcc.traps.models.Alarm;
 import cn.com.dhcc.traps.models.SyslogRealTimeLog;
 
-public class ActiveAlarmService {
+public class AlarmService {
 	
-	private ActiveAlarmDao dao;
+	private AlarmDao dao;
 	
 	/**
 	 * @param dao
 	 */
-	public ActiveAlarmService() {
+	public AlarmService() {
 		super();
-		this.dao = new ActiveAlarmDao();
+		this.dao = new AlarmDao();
 	}
 
-	public List< ActiveAlarm> quaryAllNonSended(){
+	public List< Alarm> quaryAllNonSended(){
 		Transaction transaction = HibernateUtil.getCurrentSession().beginTransaction();
 		try{
-			List<ActiveAlarm> list = dao.quaryAllNonSended();
+			List<Alarm> list = dao.quaryAllNonSended();
 			transaction.commit();
 			return list;
 		}catch(HibernateException e){
@@ -39,7 +39,7 @@ public class ActiveAlarmService {
 	}
 	
 
-	public void sended(ActiveAlarm log){
+	public void sended( Alarm log){
 		Transaction transaction = HibernateUtil.getCurrentSession().beginTransaction();
 		try{
 			dao.update(log);
@@ -49,11 +49,11 @@ public class ActiveAlarmService {
 			e.printStackTrace();
 		}
 	}
-	public void sended(List<ActiveAlarm> logs){
+	public void sended(List< Alarm> logs){
 		Transaction transaction = HibernateUtil.getCurrentSession().beginTransaction();
 		try{
-			for(ActiveAlarm log:logs){
-				log.setFlag(1);
+			for( Alarm log:logs){
+				log.setFlag((byte)1);
 				dao.update(log);
 			}
 			transaction.commit();

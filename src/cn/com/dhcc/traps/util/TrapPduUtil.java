@@ -23,7 +23,7 @@ import org.snmp4j.smi.TimeTicks;
 import org.snmp4j.smi.VariableBinding;
 
 import cn.com.dhcc.traps.TrapSender;
-import cn.com.dhcc.traps.models.ActiveAlarm;
+import cn.com.dhcc.traps.models.Alarm;
 import cn.com.dhcc.traps.models.SyslogRealTimeLog;
 
 public class TrapPduUtil {
@@ -129,10 +129,10 @@ public class TrapPduUtil {
 		return pduList;
 	}
 
-	public static List<PDUv1> convertAlarmToPdu(List<ActiveAlarm> list) {
+	public static List<PDUv1> convertAlarmToPdu(List<Alarm> list) {
 		List<PDUv1> pduList = new ArrayList();
 
-		for (ActiveAlarm alarm : list) {
+		for (Alarm alarm : list) {
 			
 			String enterprise = generateEnterprise(alarm);
 			if(!"".equals(enterprise)){
@@ -159,8 +159,7 @@ public class TrapPduUtil {
 							"1.3.6.1.4.1.6876.4.3.301.0"), new OctetString(title)));
 
 					pdu.add(new VariableBinding(new OID(
-							"1.3.6.1.4.1.6876.4.3.302.0"), new OctetString(alarm
-							.getMoIp())));
+							"1.3.6.1.4.1.6876.4.3.302.0"), new OctetString(alarm.getMoip())));
 
 					String content = URLEncoder.encode(alarm.getDetail(), "utf-8")
 							.replaceAll("%", " 0x").replaceFirst("^ ", "");
@@ -196,7 +195,7 @@ public class TrapPduUtil {
 		return pduList;
 	}
 
-	private static String generateEnterprise(ActiveAlarm alarm) {
+	private static String generateEnterprise(Alarm alarm) {
 		Set<String> dynamicLevelCauses = dynamicLevelCauseOidMap.keySet();
 		String almarCause = alarm.getCause().trim();
 		String moType = alarm.getCmoType().getMoType();

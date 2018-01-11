@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2018-1-11 15:27:54 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="cn.com.dhcc.traps.models.Alarm" table="tfactive_alarm" catalog="bigdata" optimistic-lock="version">
+        <composite-id name="id" class="cn.com.dhcc.traps.models.AlarmId">
+            <key-property name="almSn" type="long">
+                <column name="fAlmSN" precision="18" scale="0" />
+            </key-property>
+            <key-property name="count" type="int">
+                <column name="fCount" precision="9" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="mosn" type="int">
+            <column name="MOSN" precision="9" scale="0" not-null="true" />
+        </property>
+        <property name="rmosn" type="int">
+            <column name="fRMOSN" precision="9" scale="0" not-null="true" />
+        </property>
+        <property name="pmosn" type="int">
+            <column name="fPMOSN" precision="9" scale="0" not-null="true" />
+        </property>
+        <property name="motype" type="string">
+            <column name="fMOType" length="16" not-null="true" />
+        </property>
+        <property name="alarmKpi" type="string">
+            <column name="fAlarmKpi" length="10" not-null="true" />
+        </property>
+        <property name="cause" type="string">
+            <column name="fCause" length="256" not-null="true" />
+        </property>
+        <property name="almType" type="string">
+            <column name="fAlmType" length="32" />
+        </property>
+        <property name="suppressed" type="java.lang.Character">
+            <column name="fSuppressed" length="1" />
+        </property>
+        <property name="addInfo" type="string">
+            <column name="fAddInfo" length="512" />
+        </property>
+        <property name="severity" type="integer">
+            <column name="fSeverity" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="status" type="string">
+            <column name="fStatus" length="8" not-null="true" />
+        </property>
+        <property name="trend" type="string">
+            <column name="fTrend" length="8" not-null="true" />
+        </property>
+        <property name="occurTime" type="string">
+            <column name="fOccurTime" length="19" not-null="true" />
+        </property>
+        <property name="lastTime" type="string">
+            <column name="fLastTime" length="19" not-null="true" />
+        </property>
+        <property name="opStatus" type="string">
+            <column name="fOpStatus" length="32" />
+        </property>
+        <property name="detail" type="string">
+            <column name="fDetail" length="1024" />
+        </property>
+        <property name="originSn" type="string">
+            <column name="fOriginSN" length="64" />
+        </property>
+        <property name="originInfo" type="string">
+            <column name="fOriginInfo" length="1024" />
+        </property>
+        <property name="upgradeCount" type="java.lang.Integer">
+            <column name="fUpgradeCount" precision="9" scale="0" />
+        </property>
+        
+        <property name="originSeverity" type="java.lang.Boolean">
+            <column name="fOriginSeverity" precision="1" scale="0" />
+        </property>
+        <property name="clearTime" type="string">
+            <column name="fClearTime" length="19" />
+        </property>
+        <property name="confirmTime" type="string">
+            <column name="fConfirmTime" length="19" />
+        </property>
+        <property name="confirmUserId" type="string">
+            <column name="fConfirmUserID" length="32" />
+        </property>
+        <property name="delTime" type="string">
+            <column name="fDelTime" length="19" />
+        </property>
+        <property name="delUserId" type="string">
+            <column name="fDelUserID" length="32" />
+        </property>
+        <property name="relatedKpi" type="string">
+            <column name="fRelatedKpi" length="5" />
+        </property>
+        <property name="relatedMosn" type="java.lang.Integer">
+            <column name="fRelatedMOSN" precision="9" scale="0" />
+        </property>
+        <property name="dataTime" type="string">
+            <column name="fDataTime" length="19" />
+        </property>
+        <property name="dataValue" type="string">
+            <column name="fDataValue" length="256" />
+        </property>
+        <property name="moip" type="string">
+            <column name="fMOIP" length="64" not-null="true" />
+        </property>
+        <property name="moalias" type="string">
+            <column name="fMOAlias" length="256" />
+        </property>
+        <property name="causeAlias" type="string">
+            <column name="fCauseAlias" length="512" />
+        </property>
+        <property name="health" type="int">
+            <column name="fHealth" precision="9" scale="0" not-null="true" />
+        </property>
+        <property name="isNotify" type="java.lang.Character">
+            <column name="fIsNotify" length="1" />
+        </property>
+        <property name="almLocator" type="string">
+            <column name="fAlmLocator" length="16" />
+        </property>
+        <property name="flag" type="byte">
+            <column name="flag" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
